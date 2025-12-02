@@ -12,6 +12,7 @@ interface CartItemWithProduct extends CartItem {
 export function CartView() {
   const [cartItems, setCartItems] = useState<CartItemWithProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -57,11 +58,14 @@ export function CartView() {
   }, []);
 
   const updateQuantity = async (itemId: string, newCount: number) => {
+    if (updating) return;
+    
     if (newCount <= 0) {
       await removeItem(itemId);
       return;
     }
 
+    setUpdating(true);
     try {
       const { error } = await supabase
         .from('cart')
@@ -70,6 +74,7 @@ export function CartView() {
 
       if (error) throw error;
 
+      toast.success('Cantidad actualizada');
       // Actualizar el estado local
       setCartItems(prev =>
         prev.map(item =>
@@ -78,7 +83,9 @@ export function CartView() {
       );
     } catch (error) {
       console.error('Error al actualizar cantidad:', error);
-      alert('Error al actualizar cantidad');
+      toast.error('Error al actualizar cantidad');
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -225,7 +232,8 @@ export function CartView() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => updateQuantity(item.id, item.count - 1)}
-                            className="w-8 h-8 flex items-center justify-center rounded-md hover:opacity-80 transition-opacity"
+                            disabled={updating}
+                            className="w-8 h-8 flex items-center justify-center rounded-md hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                             style={{ backgroundColor: '#E5E7EB', color: '#0D1117' }}
                           >
                             -
@@ -235,7 +243,7 @@ export function CartView() {
                           </span>
                           <button
                             onClick={() => updateQuantity(item.id, item.count + 1)}
-                            disabled={item.count >= item.product.stock}
+                            disabled={updating || item.count >= item.product.stock}
                             className="w-8 h-8 flex items-center justify-center rounded-md hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                             style={{ backgroundColor: '#E5E7EB', color: '#0D1117' }}
                           >
