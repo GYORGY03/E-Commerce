@@ -171,7 +171,7 @@ export function CartView() {
       <header className="shadow-sm" style={{ backgroundColor: '#E5E7EB' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-white">Mi Carrito</h1>
+            <h1 className="text-2xl font-bold" style={{ color: '#000000' }}>Mi Carrito</h1>
             <div className="flex items-center gap-4">
               <span className="text-2xl">👤</span>
               <button
