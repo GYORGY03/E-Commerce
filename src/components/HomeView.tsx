@@ -150,50 +150,55 @@ export function HomeView() {
       <header style={{ backgroundColor: '#E5E7EB' }} className="shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold italic" style={{ color: '#000000' }}>Los Champions</h1>
-            <div className="flex items-center gap-4">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold italic" style={{ color: '#000000' }}>Los Champions</h1>
+            <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
               {user ? (
                 <>
-                  <span className="text-2xl">👤</span>
+                  <span className="text-xl sm:text-2xl">👤</span>
                   <button
                     onClick={() => navigate('/cart')}
-                    className="px-4 py-2 text-white rounded-md hover:opacity-90 transition-opacity"
+                    className="px-2 py-2 sm:px-3 md:px-4 text-white rounded-md hover:opacity-90 transition-opacity text-sm sm:text-base"
                     style={{ backgroundColor: '#4CAF50' }}
                   >
-                    🛒 Carrito
+                    <span className="inline sm:hidden">🛒</span>
+                    <span className="hidden sm:inline">🛒 Carrito</span>
                   </button>
                   {user.role === 'Admin' && (
                     <button
                       onClick={() => navigate('/admin')}
-                      className="px-4 py-2 text-white rounded-md hover:opacity-90 transition-opacity"
+                      className="px-2 py-2 sm:px-3 md:px-4 text-white rounded-md hover:opacity-90 transition-opacity text-sm sm:text-base"
                       style={{ backgroundColor: '#4CAF50' }}
                     >
-                      👨‍💼 Admin Panel
+                      <span className="inline sm:hidden">👨‍💼</span>
+                      <span className="hidden sm:inline">👨‍💼 Admin Panel</span>
                     </button>
                   )}
                   <button
                     onClick={handleLogout}
-                    className="px-4 py-2 rounded-md hover:opacity-90 transition-opacity"
+                    className="px-2 py-2 sm:px-3 md:px-4 rounded-md hover:opacity-90 transition-opacity text-sm sm:text-base"
                     style={{ color: '#FFFFFF', backgroundColor: '#6B7280' }}
                   >
-                    Cerrar Sesión
+                    <span className="inline sm:hidden">🚪</span>
+                    <span className="hidden sm:inline">Cerrar Sesión</span>
                   </button>
                 </>
               ) : (
                 <>
                   <button
                     onClick={() => navigate('/login')}
-                    className="px-4 py-2 rounded-md hover:opacity-90 transition-opacity font-medium"
+                    className="px-2 py-2 sm:px-3 md:px-4 rounded-md hover:opacity-90 transition-opacity font-medium text-sm sm:text-base"
                     style={{ color: '#FFFFFF', backgroundColor: '#6B7280' }}
                   >
-                    Iniciar Sesión
+                    <span className="inline sm:hidden">🔐</span>
+                    <span className="hidden sm:inline">Iniciar Sesión</span>
                   </button>
                   <button
                     onClick={() => navigate('/register')}
-                    className="px-4 py-2 text-white rounded-md hover:opacity-90 transition-opacity"
+                    className="px-2 py-2 sm:px-3 md:px-4 text-white rounded-md hover:opacity-90 transition-opacity text-sm sm:text-base"
                     style={{ backgroundColor: '#4CAF50' }}
                   >
-                    Registrarse
+                    <span className="inline sm:hidden">📝</span>
+                    <span className="hidden sm:inline">Registrarse</span>
                   </button>
                 </>
               )}
@@ -202,13 +207,13 @@ export function HomeView() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         {/* Filtros */}
-        <div className="p-6 rounded-lg shadow-md mb-8" style={{ backgroundColor: '#A5D6A7' }}>
-          <h2 className="text-lg font-semibold mb-4" style={{ color: '#000000' }}>Filtros</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: '#000000' }}>
+        <div className="p-4 sm:p-5 md:p-6 rounded-lg shadow-md mb-6 sm:mb-8" style={{ backgroundColor: '#A5D6A7' }}>
+          <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4" style={{ color: '#000000' }}>Filtros</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+            <div className="sm:col-span-2 md:col-span-1">
+              <label className="block text-xs sm:text-sm font-medium mb-1 sm:mb-2" style={{ color: '#000000' }}>
                 Buscar por nombre
               </label>
               <input
@@ -216,13 +221,13 @@ export function HomeView() {
                 value={searchName}
                 onChange={(e) => setSearchName(e.target.value)}
                 placeholder="Buscar productos..."
-                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2"
+                className="w-full px-3 py-2 sm:py-2.5 rounded-md focus:outline-none focus:ring-2 text-sm sm:text-base"
                 style={{ borderColor: '#F3F4F6', borderWidth: '1px', backgroundColor: '#FFFFFF', color: '#6B7280' }}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1" style={{ color: '#000000' }}>
+              <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#000000' }}>
                 Precio mínimo
               </label>
               <input
@@ -232,13 +237,13 @@ export function HomeView() {
                 placeholder="0"
                 min="0"
                 step="0.01"
-                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2"
+                className="w-full px-3 py-2 sm:py-2.5 rounded-md focus:outline-none focus:ring-2 text-sm sm:text-base"
                 style={{ borderColor: '#F3F4F6', borderWidth: '1px', backgroundColor: '#FFFFFF', color: '#000000' }}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1" style={{ color: '#000000' }}>
+              <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#000000' }}>
                 Precio máximo
               </label>
               <input
@@ -248,7 +253,7 @@ export function HomeView() {
                 placeholder="Sin límite"
                 min="0"
                 step="0.01"
-                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2"
+                className="w-full px-3 py-2 sm:py-2.5 rounded-md focus:outline-none focus:ring-2 text-sm sm:text-base"
                 style={{ borderColor: '#F3F4F6', borderWidth: '1px', backgroundColor: '#FFFFFF', color: '#000000' }}
               />
             </div>
@@ -256,26 +261,26 @@ export function HomeView() {
         </div>
 
         {/* Productos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
           {filteredProducts.map(product => (
             <div key={product.id} className="rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow" style={{ backgroundColor: '#D1D5DB' }}>
-              <div className="w-full h-48 flex items-center justify-center p-8" style={{ backgroundColor: '#F3F4F6', borderBottom: '2px solid #E5E7EB' }}>
-                <span className="text-7xl">🛍️</span>
+              <div className="w-full h-40 sm:h-48 flex items-center justify-center p-6 sm:p-8" style={{ backgroundColor: '#F3F4F6', borderBottom: '2px solid #E5E7EB' }}>
+                <span className="text-5xl sm:text-6xl md:text-7xl">🛍️</span>
               </div>
-              <div className="p-6">
-                <h3 className="text-lg font-semibold mb-2" style={{ color: '#000000' }}>
+              <div className="p-4 sm:p-5 md:p-6">
+                <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2 line-clamp-2" style={{ color: '#000000' }}>
                   {product.name}
                 </h3>
-                <p className="text-2xl font-bold mb-2" style={{ color: '#4CAF50' }}>
+                <p className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2" style={{ color: '#4CAF50' }}>
                   ${product.price.toFixed(2)}
                 </p>
-                <p className="text-sm mb-4" style={{ color: '#000000' }}>
+                <p className="text-xs sm:text-sm mb-3 sm:mb-4" style={{ color: '#000000' }}>
                   Stock disponible: <span className="font-semibold">{product.stock}</span>
                 </p>
                 <button
                   onClick={() => addToCart(product.code)}
                   disabled={product.stock === 0}
-                  className="w-full py-2 px-4 text-white rounded-md hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+                  className="w-full py-2 sm:py-2.5 px-3 sm:px-4 text-white rounded-md hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity text-sm sm:text-base font-medium"
                   style={{ backgroundColor: product.stock === 0 ? '#F3F4F6' : '#4CAF50', color: product.stock === 0 ? '#000000' : '#FFFFFF' }}
                 >
                   {product.stock === 0 ? 'Sin Stock' : 'Agregar al Carrito'}

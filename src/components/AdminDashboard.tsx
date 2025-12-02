@@ -182,40 +182,42 @@ export function AdminDashboard() {
       <Toaster position="top-center" />
       {/* Header */}
       <header className="shadow-sm" style={{ backgroundColor: '#E5E7EB' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold" style={{ color: '#000000' }}>Panel de Administración</h1>
-            <div className="flex items-center gap-4">
-              <span className="text-2xl">👨‍💼</span>
+            <h1 className="text-base sm:text-xl md:text-2xl font-bold" style={{ color: '#000000' }}>Panel de Administración</h1>
+            <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+              <span className="text-lg sm:text-xl md:text-2xl">👨‍💼</span>
               <button
                 onClick={() => navigate('/')}
-                className="px-4 py-2 rounded-md transition-opacity hover:opacity-90"
+                className="px-2 py-1.5 sm:px-3 md:px-4 sm:py-2 rounded-md transition-opacity hover:opacity-90 text-xs sm:text-sm md:text-base"
                 style={{ backgroundColor: '#F3F4F6', color: '#000000' }}
               >
-                🛍️ Ir a la Tienda
+                <span className="inline sm:hidden">🛍️</span>
+                <span className="hidden sm:inline">🛍️ Ir a la Tienda</span>
               </button>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 rounded-md transition-opacity hover:opacity-90"
+                className="px-2 py-1.5 sm:px-3 md:px-4 sm:py-2 rounded-md transition-opacity hover:opacity-90 text-xs sm:text-sm md:text-base"
                 style={{ backgroundColor: '#4CAF50', color: '#FFFFFF' }}
               >
-                Cerrar Sesión
+                <span className="inline sm:hidden">🚪</span>
+                <span className="hidden sm:inline">Cerrar Sesión</span>
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           {/* Formulario */}
-          <div className="rounded-lg shadow-md p-6" style={{ backgroundColor: '#FFFFFF' }}>
-            <h2 className="text-xl font-semibold mb-4" style={{ color: '#0D1117' }}>
+          <div className="rounded-lg shadow-md p-4 sm:p-5 md:p-6" style={{ backgroundColor: '#FFFFFF' }}>
+            <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4" style={{ color: '#0D1117' }}>
               {editingProduct ? 'Editar Producto' : 'Agregar Producto'}
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1" style={{ color: '#0D1117' }}>
+                <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#0D1117' }}>
                   Nombre *
                 </label>
                 <input
@@ -223,13 +225,13 @@ export function AdminDashboard() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 text-sm sm:text-base"
                   style={{ borderColor: '#E5E7EB', color: '#0D1117' }}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1" style={{ color: '#0D1117' }}>
+                <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#0D1117' }}>
                   Precio *
                 </label>
                 <input
@@ -239,13 +241,13 @@ export function AdminDashboard() {
                   min="0"
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 text-sm sm:text-base"
                   style={{ borderColor: '#E5E7EB', color: '#0D1117' }}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1" style={{ color: '#0D1117' }}>
+                <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#0D1117' }}>
                   Stock *
                 </label>
                 <input
@@ -254,13 +256,13 @@ export function AdminDashboard() {
                   min="0"
                   value={formData.stock}
                   onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 text-sm sm:text-base"
                   style={{ borderColor: '#E5E7EB', color: '#0D1117' }}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1" style={{ color: '#0D1117' }}>
+                <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#0D1117' }}>
                   Código *
                 </label>
                 <input
@@ -269,7 +271,7 @@ export function AdminDashboard() {
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value })}
                   disabled={!!editingProduct}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 text-sm sm:text-base"
                   style={{ borderColor: '#E5E7EB', color: '#0D1117', backgroundColor: editingProduct ? '#E5E7EB' : 'white' }}
                 />
               </div>
@@ -277,7 +279,7 @@ export function AdminDashboard() {
               <div className="flex gap-2">
                 <button
                   type="submit"
-                  className="flex-1 py-2 px-4 rounded-md transition-opacity hover:opacity-90"
+                  className="flex-1 py-2 px-3 sm:px-4 rounded-md transition-opacity hover:opacity-90 text-sm sm:text-base font-medium"
                   style={{ backgroundColor: '#4CAF50', color: '#FFFFFF' }}
                 >
                   {editingProduct ? 'Actualizar' : 'Agregar'}
@@ -286,7 +288,7 @@ export function AdminDashboard() {
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="px-4 py-2 rounded-md transition-opacity hover:opacity-90"
+                    className="px-3 sm:px-4 py-2 rounded-md transition-opacity hover:opacity-90 text-sm sm:text-base"
                     style={{ backgroundColor: '#F3F4F6', color: '#000000' }}
                   >
                     Cancelar
@@ -297,28 +299,28 @@ export function AdminDashboard() {
           </div>
 
           {/* Lista de Productos */}
-          <div className="rounded-lg shadow-md p-6" style={{ backgroundColor: '#FFFFFF' }}>
-            <h2 className="text-xl font-semibold mb-4" style={{ color: '#0D1117' }}>
+          <div className="rounded-lg shadow-md p-4 sm:p-5 md:p-6" style={{ backgroundColor: '#FFFFFF' }}>
+            <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4" style={{ color: '#0D1117' }}>
               Productos ({products.length})
             </h2>
-            <div className="overflow-auto max-h-[600px]">
+            <div className="overflow-auto max-h-[400px] sm:max-h-[500px] md:max-h-[600px]">
               {products.length === 0 ? (
                 <p className="text-center py-8" style={{ color: '#000000' }}>No hay productos registrados</p>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {products.map(product => (
-                    <div key={product.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow" style={{ borderColor: '#F3F4F6', backgroundColor: '#FFFFFF' }}>
+                    <div key={product.id} className="border rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow" style={{ borderColor: '#F3F4F6', backgroundColor: '#FFFFFF' }}>
                       <div className="flex justify-between items-start mb-2">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-lg" style={{ color: '#000000' }}>
+                        <div className="flex-1 min-w-0 pr-2">
+                          <h3 className="font-semibold text-sm sm:text-base md:text-lg truncate" style={{ color: '#000000' }}>
                             {product.name}
                           </h3>
-                          <p className="text-sm" style={{ color: '#000000' }}>Código: {product.code}</p>
+                          <p className="text-xs sm:text-sm" style={{ color: '#000000' }}>Código: {product.code}</p>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-1 sm:gap-2 shrink-0">
                           <button
                             onClick={() => handleEdit(product)}
-                            className="p-2 rounded-md transition-opacity hover:opacity-80"
+                            className="p-1.5 sm:p-2 rounded-md transition-opacity hover:opacity-80 text-lg sm:text-xl"
                             style={{ color: '#E5E7EB' }}
                             title="Editar"
                           >
@@ -326,7 +328,7 @@ export function AdminDashboard() {
                           </button>
                           <button
                             onClick={() => handleDelete(product.id)}
-                            className="p-2 rounded-md transition-opacity hover:opacity-80"
+                            className="p-1.5 sm:p-2 rounded-md transition-opacity hover:opacity-80 text-lg sm:text-xl"
                             style={{ color: '#4CAF50' }}
                             title="Eliminar"
                           >
@@ -335,10 +337,10 @@ export function AdminDashboard() {
                         </div>
                       </div>
                       <div className="flex justify-between items-center mt-2">
-                        <span className="text-lg font-bold" style={{ color: '#4CAF50' }}>
+                        <span className="text-base sm:text-lg font-bold" style={{ color: '#4CAF50' }}>
                           ${product.price.toFixed(2)}
                         </span>
-                        <span className="text-sm" style={{ color: '#000000' }}>
+                        <span className="text-xs sm:text-sm" style={{ color: '#000000' }}>
                           Stock: <span className="font-semibold">{product.stock}</span>
                         </span>
                       </div>

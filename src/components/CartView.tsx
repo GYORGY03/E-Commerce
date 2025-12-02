@@ -176,37 +176,39 @@ export function CartView() {
       <Toaster position="top-center" />
       {/* Header */}
       <header className="shadow-sm" style={{ backgroundColor: '#E5E7EB' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold" style={{ color: '#000000' }}>Mi Carrito</h1>
-            <div className="flex items-center gap-4">
-              <span className="text-2xl">👤</span>
+            <h1 className="text-lg sm:text-xl md:text-2xl font-bold" style={{ color: '#000000' }}>Mi Carrito</h1>
+            <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+              <span className="text-lg sm:text-xl md:text-2xl">👤</span>
               <button
                 onClick={() => navigate('/')}
-                className="px-4 py-2 bg-white rounded-md hover:opacity-90 transition-opacity"
+                className="px-2 py-1.5 sm:px-3 md:px-4 sm:py-2 bg-white rounded-md hover:opacity-90 transition-opacity text-xs sm:text-sm md:text-base"
                 style={{ color: '#0D1117' }}
               >
-                ← Seguir Comprando
+                <span className="inline sm:hidden">🏠</span>
+                <span className="hidden sm:inline">← Seguir Comprando</span>
               </button>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 text-white rounded-md hover:opacity-90 transition-opacity"
+                className="px-2 py-1.5 sm:px-3 md:px-4 sm:py-2 text-white rounded-md hover:opacity-90 transition-opacity text-xs sm:text-sm md:text-base"
                 style={{ backgroundColor: '#4CAF50' }}
               >
-                Cerrar Sesión
+                <span className="inline sm:hidden">🚪</span>
+                <span className="hidden sm:inline">Cerrar Sesión</span>
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         {cartItems.length === 0 ? (
-          <div className="rounded-lg shadow-md p-12 text-center" style={{ backgroundColor: '#FFFFFF' }}>
-            <p className="text-lg mb-4" style={{ color: '#0D1117', opacity: 0.7 }}>Tu carrito está vacío</p>
+          <div className="text-center py-8 sm:py-10 md:py-12" style={{ backgroundColor: '#FFFFFF' }}>
+            <p className="text-lg sm:text-xl mb-3 sm:mb-4" style={{ color: '#0D1117' }}>Tu carrito está vacío</p>
             <button
               onClick={() => navigate('/')}
-              className="px-6 py-3 text-white rounded-md hover:opacity-90 transition-opacity"
+              className="px-4 py-2 sm:px-5 md:px-6 sm:py-2.5 md:py-3 text-white rounded-md hover:opacity-90 transition-opacity text-sm sm:text-base font-medium"
               style={{ backgroundColor: '#4CAF50' }}
             >
               Ir a Comprar
@@ -214,52 +216,52 @@ export function CartView() {
           </div>
         ) : (
           <>
-            <div className="rounded-lg shadow-md overflow-hidden mb-6" style={{ backgroundColor: '#FFFFFF' }}>
+            <div className="rounded-lg shadow-md overflow-hidden mb-4 sm:mb-5 md:mb-6" style={{ backgroundColor: '#FFFFFF' }}>
               {cartItems.map(item => (
                 item.product && (
-                  <div key={item.id} className="p-6" style={{ borderBottom: '1px solid #E5E7EB' }}>
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold mb-1" style={{ color: '#0D1117' }}>
+                  <div key={item.id} className="p-3 sm:p-4 md:p-6" style={{ borderBottom: '1px solid #E5E7EB' }}>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-sm sm:text-base md:text-lg font-semibold mb-1 truncate" style={{ color: '#0D1117' }}>
                           {item.product.name}
                         </h3>
-                        <p className="text-lg font-bold" style={{ color: '#4CAF50' }}>
+                        <p className="text-base sm:text-lg font-bold" style={{ color: '#4CAF50' }}>
                           ${item.product.price.toFixed(2)} c/u
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
                           <button
                             onClick={() => updateQuantity(item.id, item.count - 1)}
                             disabled={updating}
-                            className="w-8 h-8 flex items-center justify-center rounded-md hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-md hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                             style={{ backgroundColor: '#E5E7EB', color: '#0D1117' }}
                           >
                             -
                           </button>
-                          <span className="w-12 text-center font-semibold" style={{ color: '#0D1117' }}>
+                          <span className="w-8 sm:w-12 text-center font-semibold text-sm sm:text-base" style={{ color: '#0D1117' }}>
                             {item.count}
                           </span>
                           <button
                             onClick={() => updateQuantity(item.id, item.count + 1)}
                             disabled={updating || item.count >= item.product.stock}
-                            className="w-8 h-8 flex items-center justify-center rounded-md hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-md hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                             style={{ backgroundColor: '#E5E7EB', color: '#0D1117' }}
                           >
                             +
                           </button>
                         </div>
 
-                        <div className="w-32 text-right">
-                          <p className="text-xl font-bold" style={{ color: '#0D1117' }}>
+                        <div className="min-w-20 sm:min-w-[100px] md:w-32 text-right">
+                          <p className="text-base sm:text-lg md:text-xl font-bold" style={{ color: '#0D1117' }}>
                             ${(item.product.price * item.count).toFixed(2)}
                           </p>
                         </div>
 
                         <button
                           onClick={() => removeItem(item.id)}
-                          className="ml-4 p-2 rounded-md hover:opacity-80 transition-opacity"
+                          className="p-1.5 sm:p-2 rounded-md hover:opacity-80 transition-opacity text-lg sm:text-xl"
                           style={{ color: '#4CAF50' }}
                           title="Eliminar"
                         >
@@ -273,15 +275,15 @@ export function CartView() {
             </div>
 
             {/* Total */}
-            <div className="rounded-lg shadow-md p-6" style={{ backgroundColor: '#D1D5DB' }}>
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-xl font-semibold" style={{ color: '#000000' }}>Total:</span>
-              <span className="text-2xl font-bold" style={{ color: '#4CAF50' }}>
+            <div className="rounded-lg shadow-md p-4 sm:p-5 md:p-6" style={{ backgroundColor: '#D1D5DB' }}>
+            <div className="flex justify-between items-center mb-3 sm:mb-4">
+              <span className="text-base sm:text-lg md:text-xl font-semibold" style={{ color: '#000000' }}>Total:</span>
+              <span className="text-xl sm:text-2xl font-bold" style={{ color: '#4CAF50' }}>
                   ${calculateTotal().toFixed(2)}
                 </span>
               </div>
               <button
-                className="w-full py-3 px-4 text-white rounded-md hover:opacity-90 transition-opacity font-semibold text-lg"
+                className="w-full py-2.5 sm:py-3 px-3 sm:px-4 text-white rounded-md hover:opacity-90 transition-opacity font-semibold text-sm sm:text-base md:text-lg"
                 style={{ backgroundColor: '#4CAF50' }}
                 onClick={() => toast('Funcionalidad de compra en desarrollo', { icon: '🛍️' })}
               >
