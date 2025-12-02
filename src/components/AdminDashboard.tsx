@@ -10,6 +10,7 @@ export function AdminDashboard() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [cartItemCount, setCartItemCount] = useState(0);
   
   // Formulario
   const [formData, setFormData] = useState({
@@ -19,12 +20,15 @@ export function AdminDashboard() {
     code: ''
   });
 
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     loadProducts();
-  }, []);
+    if (user) {
+      loadCartCount();
+    }
+  }, [user]);
 
   const loadProducts = async () => {
     try {
@@ -39,6 +43,24 @@ export function AdminDashboard() {
       console.error('Error al cargar productos:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadCartCount = async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('cart')
+        .select('count')
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      
+      const totalCount = (data || []).reduce((sum, item) => sum + item.count, 0);
+      setCartItemCount(totalCount);
+    } catch (error) {
+      console.error('Error al cargar conteo del carrito:', error);
     }
   };
 
@@ -189,11 +211,17 @@ export function AdminDashboard() {
               <span className="text-lg sm:text-xl md:text-2xl">👨‍💼</span>
               <button
                 onClick={() => navigate('/')}
-                className="px-2 py-1.5 sm:px-3 md:px-4 sm:py-2 rounded-md transition-opacity hover:opacity-90 text-xs sm:text-sm md:text-base"
+                className="relative px-2 py-1.5 sm:px-3 md:px-4 sm:py-2 rounded-md transition-opacity hover:opacity-90 text-xs sm:text-sm md:text-base"
                 style={{ backgroundColor: '#F3F4F6', color: '#000000' }}
               >
                 <span className="inline sm:hidden">🛍️</span>
                 <span className="hidden sm:inline">🛍️ Ir a la Tienda</span>
+                {cartItemCount > 0 && (
+                  <span 
+                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full"
+                    style={{ backgroundColor: '#EF4444' }}
+                  ></span>
+                )}
               </button>
               <button
                 onClick={handleLogout}

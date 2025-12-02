@@ -9,6 +9,7 @@ export function HomeView() {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [cartItemCount, setCartItemCount] = useState(0);
   
   // Filtros
   const [searchName, setSearchName] = useState('');
@@ -20,7 +21,10 @@ export function HomeView() {
 
   useEffect(() => {
     loadProducts();
-  }, []);
+    if (user) {
+      loadCartCount();
+    }
+  }, [user]);
 
   const applyFilters = () => {
     let filtered = [...products];
@@ -65,6 +69,24 @@ export function HomeView() {
     }
   };
 
+  const loadCartCount = async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('cart')
+        .select('count')
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      
+      const totalCount = (data || []).reduce((sum, item) => sum + item.count, 0);
+      setCartItemCount(totalCount);
+    } catch (error) {
+      console.error('Error al cargar conteo del carrito:', error);
+    }
+  };
+
   const addToCart = async (productCode: string) => {
     if (!user) {
       // Redirigir al login si no está autenticado
@@ -103,6 +125,7 @@ export function HomeView() {
       }
 
       toast.success('Producto agregado al carrito');
+      loadCartCount();
     } catch (error) {
       console.error('Error al agregar al carrito:', error);
       toast.error('Error al agregar al carrito');
@@ -157,11 +180,14 @@ export function HomeView() {
                   <span className="text-xl sm:text-2xl">👤</span>
                   <button
                     onClick={() => navigate('/cart')}
-                    className="px-2 py-2 sm:px-3 md:px-4 text-white rounded-md hover:opacity-90 transition-opacity text-sm sm:text-base"
+                    className="relative px-2 py-2 sm:px-3 md:px-4 text-white rounded-md hover:opacity-90 transition-opacity text-sm sm:text-base"
                     style={{ backgroundColor: '#4CAF50' }}
                   >
                     <span className="inline sm:hidden">🛒</span>
                     <span className="hidden sm:inline">🛒 Carrito</span>
+                    {cartItemCount > 0 && (
+                      <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full" style={{ backgroundColor: '#EF4444' }}></span>
+                    )}
                   </button>
                   {user.role === 'Admin' && (
                     <button
