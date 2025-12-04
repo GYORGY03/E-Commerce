@@ -4,12 +4,16 @@ import { useAuth } from '../hooks/useAuth';
 import { supabase } from '../supabaseClient';
 import type { Product } from '../types';
 import toast, { Toaster } from 'react-hot-toast';
+import { Sidebar } from 'primereact/sidebar';
+import { Button } from 'primereact/button';
+        
 
 export function HomeView() {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [cartItemCount, setCartItemCount] = useState(0);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   
   // Filtros
   const [searchName, setSearchName] = useState('');
@@ -234,12 +238,29 @@ export function HomeView() {
       </header>
 
       <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
-        {/* Filtros */}
-        <div className="p-4 sm:p-5 md:p-6 rounded-lg shadow-md mb-6 sm:mb-8" style={{ backgroundColor: '#A5D6A7' }}>
-          <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4" style={{ color: '#000000' }}>Filtros</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-            <div className="sm:col-span-2 md:col-span-1">
-              <label className="block text-xs sm:text-sm font-medium mb-1 sm:mb-2" style={{ color: '#000000' }}>
+        {/* Botón para abrir filtros */}
+        <div className="mb-6">
+          <Button 
+            icon="pi pi-filter" 
+            label="Filtros" 
+            onClick={() => setSidebarVisible(true)}
+            className="p-button-rounded"
+            style={{ backgroundColor: '#4CAF50', border: 'none' }}
+          />
+        </div>
+
+        {/* Sidebar con Filtros */}
+        <Sidebar 
+          visible={sidebarVisible} 
+          onHide={() => setSidebarVisible(false)}
+          position="left"
+          style={{ width: '300px' }}
+        >
+          <div className="p-4">
+            <h2 className="text-lg font-semibold mb-4" style={{ color: '#000000' }}>Filtros</h2>
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2" style={{ color: '#000000' }}>
                 Buscar por nombre
               </label>
               <input
@@ -247,13 +268,13 @@ export function HomeView() {
                 value={searchName}
                 onChange={(e) => setSearchName(e.target.value)}
                 placeholder="Buscar productos..."
-                className="w-full px-3 py-2 sm:py-2.5 rounded-md focus:outline-none focus:ring-2 text-sm sm:text-base"
-                style={{ borderColor: '#F3F4F6', borderWidth: '1px', backgroundColor: '#FFFFFF', color: '#6B7280' }}
+                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-sm"
+                style={{ borderColor: '#D1D5DB', borderWidth: '1px', backgroundColor: '#FFFFFF', color: '#000000' }}
               />
             </div>
 
-            <div>
-              <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#000000' }}>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2" style={{ color: '#000000' }}>
                 Precio mínimo
               </label>
               <input
@@ -263,13 +284,13 @@ export function HomeView() {
                 placeholder="0"
                 min="0"
                 step="0.01"
-                className="w-full px-3 py-2 sm:py-2.5 rounded-md focus:outline-none focus:ring-2 text-sm sm:text-base"
-                style={{ borderColor: '#F3F4F6', borderWidth: '1px', backgroundColor: '#FFFFFF', color: '#000000' }}
+                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-sm"
+                style={{ borderColor: '#D1D5DB', borderWidth: '1px', backgroundColor: '#FFFFFF', color: '#000000' }}
               />
             </div>
 
-            <div>
-              <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#000000' }}>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2" style={{ color: '#000000' }}>
                 Precio máximo
               </label>
               <input
@@ -279,21 +300,29 @@ export function HomeView() {
                 placeholder="Sin límite"
                 min="0"
                 step="0.01"
-                className="w-full px-3 py-2 sm:py-2.5 rounded-md focus:outline-none focus:ring-2 text-sm sm:text-base"
-                style={{ borderColor: '#F3F4F6', borderWidth: '1px', backgroundColor: '#FFFFFF', color: '#000000' }}
+                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-sm"
+                style={{ borderColor: '#D1D5DB', borderWidth: '1px', backgroundColor: '#FFFFFF', color: '#000000' }}
               />
             </div>
+
+            <button
+              onClick={() => setSidebarVisible(false)}
+              className="w-full py-2 px-4 text-white rounded-md hover:opacity-90 transition-opacity text-sm font-medium mt-4"
+              style={{ backgroundColor: '#4CAF50' }}
+            >
+              Aplicar Filtros
+            </button>
           </div>
-        </div>
+        </Sidebar>
 
         {/* Productos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
           {filteredProducts.map(product => (
-            <div key={product.id} className="rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow" style={{ backgroundColor: '#D1D5DB' }}>
+            <div key={product.id} className="rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow flex flex-col" style={{ backgroundColor: '#D1D5DB' }}>
               <div className="w-full h-40 sm:h-48 flex items-center justify-center p-6 sm:p-8" style={{ backgroundColor: '#F3F4F6', borderBottom: '2px solid #E5E7EB' }}>
                 <span className="text-5xl sm:text-6xl md:text-7xl">🛍️</span>
               </div>
-              <div className="p-4 sm:p-5 md:p-6">
+              <div className="p-4 sm:p-5 md:p-6 flex flex-col flex-grow">
                 <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2 line-clamp-2" style={{ color: '#000000' }}>
                   {product.name}
                 </h3>
@@ -306,7 +335,7 @@ export function HomeView() {
                 <button
                   onClick={() => addToCart(product.code)}
                   disabled={product.stock === 0}
-                  className="w-full py-2 sm:py-2.5 px-3 sm:px-4 text-white rounded-md hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity text-sm sm:text-base font-medium"
+                  className="w-full py-2 sm:py-2.5 px-3 sm:px-4 text-white rounded-md hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity text-sm sm:text-base font-medium mt-auto"
                   style={{ backgroundColor: product.stock === 0 ? '#F3F4F6' : '#4CAF50', color: product.stock === 0 ? '#000000' : '#FFFFFF' }}
                 >
                   {product.stock === 0 ? 'Sin Stock' : 'Agregar al Carrito'}
