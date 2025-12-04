@@ -180,19 +180,19 @@ export function CartView() {
           <div className="flex justify-between items-center">
             <h1 className="text-lg sm:text-xl md:text-2xl font-bold" style={{ color: '#000000' }}>Mi Carrito</h1>
             <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-              <i className="pi pi-user text-lg sm:text-xl md:text-2xl" style={{ color: '#000000' }}></i>
+              <span className="text-lg sm:text-xl md:text-2xl">👤</span>
               <button
                 onClick={() => navigate('/')}
                 className="px-2 py-1.5 sm:px-3 md:px-4 sm:py-2 bg-white rounded-md hover:opacity-90 transition-opacity text-xs sm:text-sm md:text-base"
                 style={{ color: '#0D1117' }}
               >
-                <i className="pi pi-home mr-0 sm:mr-1"></i>
-                <span className="hidden sm:inline">Seguir Comprando</span>
+                <span className="inline sm:hidden">🏠</span>
+                <span className="hidden sm:inline">← Seguir Comprando</span>
               </button>
               <button
                 onClick={handleLogout}
                 className="px-2 py-1.5 sm:px-3 md:px-4 sm:py-2 text-white rounded-md hover:opacity-90 transition-opacity text-xs sm:text-sm md:text-base"
-                style={{ backgroundColor: '#4CAF50' }}
+                style={{ backgroundColor: '#e72f2fff' }}
               >
                 <i className="pi pi-sign-out mr-0 sm:mr-1"></i>
                 <span className="hidden sm:inline">Cerrar Sesión</span>
@@ -261,11 +261,11 @@ export function CartView() {
 
                         <button
                           onClick={() => removeItem(item.id)}
-                          className="p-1.5 sm:p-2 rounded-md hover:opacity-80 transition-opacity"
-                          style={{ backgroundColor: '#EF4444' }}
+                          className="p-1.5 sm:p-2 rounded-md hover:opacity-80 transition-opacity text-lg sm:text-xl"
+                          style={{ color: '#4CAF50' }}
                           title="Eliminar"
                         >
-                          <i className="pi pi-trash" style={{ color: '#FFFFFF' }}></i>
+                          🗑️
                         </button>
                       </div>
                     </div>
@@ -285,7 +285,7 @@ export function CartView() {
               <button
                 className="w-full py-2.5 sm:py-3 px-3 sm:px-4 text-white rounded-md hover:opacity-90 transition-opacity font-semibold text-sm sm:text-base md:text-lg"
                 style={{ backgroundColor: '#4CAF50' }}
-                onClick={() => toast.success('Funcionalidad de compra en desarrollo')}
+                onClick={() => toast('Funcionalidad de compra en desarrollo', { icon: '🛍️' })}
               >
                 Proceder al Pago
               </button>

@@ -237,7 +237,7 @@ export function HomeView() {
                   <button
                     onClick={handleLogout}
                     className="px-2 py-2 sm:px-3 md:px-4 rounded-md hover:opacity-90 transition-opacity text-sm sm:text-base"
-                    style={{ color: '#FFFFFF', backgroundColor: '#6B7280' }}
+                    style={{ color: '#FFFFFF', backgroundColor: '#f03737ff' }}
                   >
                     <i className="pi pi-sign-out mr-0 sm:mr-1"></i>
                     <span className="hidden sm:inline">Cerrar Sesión</span>

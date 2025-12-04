@@ -262,7 +262,7 @@ export function AdminDashboard() {
               <button
                 onClick={handleLogout}
                 className="px-2 py-1.5 sm:px-3 md:px-4 sm:py-2 rounded-md transition-opacity hover:opacity-90 text-xs sm:text-sm md:text-base"
-                style={{ backgroundColor: '#4CAF50', color: '#FFFFFF' }}
+                style={{ backgroundColor: '#f03737ff', color: '#FFFFFF' }}
               >
                 <i className="pi pi-sign-out mr-0 sm:mr-1"></i>
                 <span className="hidden sm:inline">Cerrar Sesión</span>
