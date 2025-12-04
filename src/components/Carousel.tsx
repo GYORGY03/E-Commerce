@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Carousel } from 'primereact/carousel';
 import type { CarouselResponsiveOption } from 'primereact/carousel';
-import { Tag } from 'primereact/tag';
 import { supabase } from '../supabaseClient';
 import type { Product } from '../types';
 
@@ -29,24 +28,6 @@ export default function ProductCarousel() {
             numScroll: 1
         }
     ];
-
-    const getSeverity = (product: Product) => {
-        if (product.stock === 0) {
-            return 'danger';
-        } else if (product.stock < 10) {
-            return 'warning';
-        }
-        return 'success';
-    };
-
-    const getStockLabel = (product: Product) => {
-        if (product.stock === 0) {
-            return 'SIN STOCK';
-        } else if (product.stock < 10) {
-            return 'POCO STOCK';
-        }
-        return 'EN STOCK';
-    };
 
     useEffect(() => {
         loadProducts();
@@ -89,13 +70,6 @@ export default function ProductCarousel() {
                 </div>
                 <div>
                     <h4 className="mb-1 line-clamp-2" style={{ minHeight: '3rem' }}>{product.name}</h4>
-                    <h6 className="mt-0 mb-3" style={{ color: '#4CAF50', fontSize: '1.5rem', fontWeight: 'bold' }}>${product.price.toFixed(2)}</h6>
-                    <Tag value={getStockLabel(product)} severity={getSeverity(product)}></Tag>
-                    <div className="mt-3">
-                        <p className="text-sm" style={{ color: '#6B7280' }}>
-                            Stock: <strong>{product.stock}</strong>
-                        </p>
-                    </div>
                 </div>
             </div>
         );
