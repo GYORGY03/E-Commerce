@@ -244,14 +244,14 @@ export function AdminDashboard() {
           <div className="flex justify-between items-center">
             <h1 className="text-base sm:text-xl md:text-2xl font-bold" style={{ color: '#000000' }}>Panel de Administración</h1>
             <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-              <span className="text-lg sm:text-xl md:text-2xl">👨‍💼</span>
+              <i className="pi pi-user-edit text-lg sm:text-xl md:text-2xl" style={{ color: '#000000' }}></i>
               <button
                 onClick={() => navigate('/')}
                 className="relative px-2 py-1.5 sm:px-3 md:px-4 sm:py-2 rounded-md transition-opacity hover:opacity-90 text-xs sm:text-sm md:text-base"
                 style={{ backgroundColor: '#F3F4F6', color: '#000000' }}
               >
-                <span className="inline sm:hidden">🛍️</span>
-                <span className="hidden sm:inline">🛍️ Ir a la Tienda</span>
+                <i className="pi pi-shopping-bag mr-0 sm:mr-1"></i>
+                <span className="hidden sm:inline">Ir a la Tienda</span>
                 {cartItemCount > 0 && (
                   <span 
                     className="absolute -top-1 -right-1 w-4 h-4 rounded-full"
@@ -264,7 +264,7 @@ export function AdminDashboard() {
                 className="px-2 py-1.5 sm:px-3 md:px-4 sm:py-2 rounded-md transition-opacity hover:opacity-90 text-xs sm:text-sm md:text-base"
                 style={{ backgroundColor: '#4CAF50', color: '#FFFFFF' }}
               >
-                <span className="inline sm:hidden">🚪</span>
+                <i className="pi pi-sign-out mr-0 sm:mr-1"></i>
                 <span className="hidden sm:inline">Cerrar Sesión</span>
               </button>
             </div>
@@ -418,19 +418,19 @@ export function AdminDashboard() {
                         <div className="flex gap-1 sm:gap-2 shrink-0">
                           <button
                             onClick={() => handleEdit(product)}
-                            className="p-1.5 sm:p-2 rounded-md transition-opacity hover:opacity-80 text-lg sm:text-xl"
-                            style={{ color: '#E5E7EB' }}
+                            className="p-1.5 sm:p-2 rounded-md transition-opacity hover:opacity-80"
+                            style={{ backgroundColor: '#4CAF50' }}
                             title="Editar"
                           >
-                            ✏️
+                            <i className="pi pi-pencil" style={{ color: '#FFFFFF' }}></i>
                           </button>
                           <button
                             onClick={() => handleDelete(product.id)}
-                            className="p-1.5 sm:p-2 rounded-md transition-opacity hover:opacity-80 text-lg sm:text-xl"
-                            style={{ color: '#4CAF50' }}
+                            className="p-1.5 sm:p-2 rounded-md transition-opacity hover:opacity-80"
+                            style={{ backgroundColor: '#EF4444' }}
                             title="Eliminar"
                           >
-                            🗑️
+                            <i className="pi pi-trash" style={{ color: '#FFFFFF' }}></i>
                           </button>
                         </div>
                       </div>
