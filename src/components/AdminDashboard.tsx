@@ -11,6 +11,9 @@ export function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [cartItemCount, setCartItemCount] = useState(0);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
+  const [uploadingImage, setUploadingImage] = useState(false);
   
   // Formulario
   const [formData, setFormData] = useState({
@@ -67,14 +70,42 @@ export function AdminDashboard() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    const productData = {
-      name: formData.name,
-      price: parseFloat(formData.price),
-      stock: parseInt(formData.stock),
-      code: formData.code
-    };
+    let imageUrl = editingProduct?.image_url || '';
 
     try {
+      // Si hay una nueva imagen, subirla primero
+      if (imageFile) {
+        setUploadingImage(true);
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `${formData.code}_${Date.now()}.${fileExt}`;
+        const filePath = fileName;
+
+        const { error: uploadError } = await supabase.storage
+          .from('img')
+          .upload(filePath, imageFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+        if (uploadError) throw uploadError;
+
+        // Obtener URL pública de la imagen
+        const { data: urlData } = supabase.storage
+          .from('img')
+          .getPublicUrl(filePath);
+
+        imageUrl = urlData.publicUrl;
+        setUploadingImage(false);
+      }
+
+      const productData = {
+        name: formData.name,
+        price: parseFloat(formData.price),
+        stock: parseInt(formData.stock),
+        code: formData.code,
+        image_url: imageUrl
+      };
+
       if (editingProduct) {
         // Actualizar producto existente
         const { error } = await supabase
@@ -105,6 +136,7 @@ export function AdminDashboard() {
     } catch (error) {
       console.error('Error al guardar producto:', error);
       toast.error('Error al guardar producto');
+      setUploadingImage(false);
     }
   };
 
@@ -116,6 +148,8 @@ export function AdminDashboard() {
       stock: product.stock.toString(),
       code: product.code
     });
+    setImagePreview(product.image_url || '');
+    setImageFile(null);
   };
 
   const handleDelete = async (productId: string) => {
@@ -163,6 +197,8 @@ export function AdminDashboard() {
       stock: '',
       code: ''
     });
+    setImageFile(null);
+    setImagePreview('');
   };
 
   const handleLogout = () => {
@@ -304,13 +340,47 @@ export function AdminDashboard() {
                 />
               </div>
 
+              <div>
+                <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#0D1117' }}>
+                  Imagen del Producto
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setImageFile(file);
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setImagePreview(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 text-sm sm:text-base"
+                  style={{ borderColor: '#E5E7EB', color: '#0D1117' }}
+                />
+                {imagePreview && (
+                  <div className="mt-2">
+                    <img 
+                      src={imagePreview} 
+                      alt="Preview" 
+                      className="w-32 h-32 object-cover rounded-md border"
+                      style={{ borderColor: '#E5E7EB' }}
+                    />
+                  </div>
+                )}
+              </div>
+
               <div className="flex gap-2">
                 <button
                   type="submit"
+                  disabled={uploadingImage}
                   className="flex-1 py-2 px-3 sm:px-4 rounded-md transition-opacity hover:opacity-90 text-sm sm:text-base font-medium"
-                  style={{ backgroundColor: '#4CAF50', color: '#FFFFFF' }}
+                  style={{ backgroundColor: uploadingImage ? '#A5D6A7' : '#4CAF50', color: '#FFFFFF' }}
                 >
-                  {editingProduct ? 'Actualizar' : 'Agregar'}
+                  {uploadingImage ? 'Subiendo imagen...' : (editingProduct ? 'Actualizar' : 'Agregar')}
                 </button>
                 {editingProduct && (
                   <button

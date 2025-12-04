@@ -10,6 +10,7 @@ export interface Product {
   price: number;
   stock: number;
   code: string;
+  image_url?: string;
 }
 
 export interface CartItem {

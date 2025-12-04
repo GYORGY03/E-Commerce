@@ -6,7 +6,35 @@ import type { Product } from '../types';
 import toast, { Toaster } from 'react-hot-toast';
 import { Sidebar } from 'primereact/sidebar';
 import { Button } from 'primereact/button';
-        
+import { Slider } from 'primereact/slider';
+
+// Componente de Slider para precios
+function PriceSlider({ label, value, maxValue, onChange }: { 
+  label: string; 
+  value: number; 
+  maxValue: number; 
+  onChange: (value: number) => void 
+}) {
+  return (
+    <div className="mb-6">
+      <label className="block text-sm font-medium mb-3" style={{ color: '#000000' }}>
+        {label}: <strong>${value}</strong>
+      </label>
+      <Slider 
+        value={value} 
+        onChange={(e) => onChange(e.value as number)} 
+        max={maxValue}
+        step={1}
+        style={{ width: '100%' }}
+        pt={{
+          root: { style: { backgroundColor: '#E5E7EB' } },
+          range: { style: { backgroundColor: '#4CAF50' } },
+          handle: { style: { backgroundColor: '#FFFFFF', border: '3px solid #4CAF50' } }
+        }}
+      />
+    </div>
+  );
+}
 
 export function HomeView() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -14,11 +42,12 @@ export function HomeView() {
   const [loading, setLoading] = useState(true);
   const [cartItemCount, setCartItemCount] = useState(0);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [maxProductPrice, setMaxProductPrice] = useState(1000);
   
   // Filtros
   const [searchName, setSearchName] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(1000);
   
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -41,12 +70,7 @@ export function HomeView() {
     }
 
     // Filtrar por rango de precios
-    if (minPrice) {
-      filtered = filtered.filter(p => p.price >= parseFloat(minPrice));
-    }
-    if (maxPrice) {
-      filtered = filtered.filter(p => p.price <= parseFloat(maxPrice));
-    }
+    filtered = filtered.filter(p => p.price >= minPrice && p.price <= maxPrice);
 
     setFilteredProducts(filtered);
   };
@@ -66,6 +90,13 @@ export function HomeView() {
       if (error) throw error;
 
       setProducts(data || []);
+      
+      // Calcular precio máximo de los productos
+      if (data && data.length > 0) {
+        const maxPrice = Math.max(...data.map(p => p.price));
+        setMaxProductPrice(Math.ceil(maxPrice));
+        setMaxPrice(Math.ceil(maxPrice));
+      }
     } catch (error) {
       console.error('Error al cargar productos:', error);
     } finally {
@@ -181,14 +212,14 @@ export function HomeView() {
             <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
               {user ? (
                 <>
-                  <span className="text-xl sm:text-2xl">👤</span>
+                  <i className="pi pi-user text-xl sm:text-2xl" style={{ color: '#000000' }}></i>
                   <button
                     onClick={() => navigate('/cart')}
                     className="relative px-2 py-2 sm:px-3 md:px-4 text-white rounded-md hover:opacity-90 transition-opacity text-sm sm:text-base"
                     style={{ backgroundColor: '#4CAF50' }}
                   >
-                    <span className="inline sm:hidden">🛒</span>
-                    <span className="hidden sm:inline">🛒 Carrito</span>
+                    <i className="pi pi-shopping-cart mr-0 sm:mr-1"></i>
+                    <span className="hidden sm:inline">Carrito</span>
                     {cartItemCount > 0 && (
                       <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full" style={{ backgroundColor: '#EF4444' }}></span>
                     )}
@@ -199,8 +230,8 @@ export function HomeView() {
                       className="px-2 py-2 sm:px-3 md:px-4 text-white rounded-md hover:opacity-90 transition-opacity text-sm sm:text-base"
                       style={{ backgroundColor: '#4CAF50' }}
                     >
-                      <span className="inline sm:hidden">👨‍💼</span>
-                      <span className="hidden sm:inline">👨‍💼 Admin Panel</span>
+                      <i className="pi pi-user-edit mr-0 sm:mr-1"></i>
+                      <span className="hidden sm:inline">Admin Panel</span>
                     </button>
                   )}
                   <button
@@ -208,7 +239,7 @@ export function HomeView() {
                     className="px-2 py-2 sm:px-3 md:px-4 rounded-md hover:opacity-90 transition-opacity text-sm sm:text-base"
                     style={{ color: '#FFFFFF', backgroundColor: '#6B7280' }}
                   >
-                    <span className="inline sm:hidden">🚪</span>
+                    <i className="pi pi-sign-out mr-0 sm:mr-1"></i>
                     <span className="hidden sm:inline">Cerrar Sesión</span>
                   </button>
                 </>
@@ -219,7 +250,7 @@ export function HomeView() {
                     className="px-2 py-2 sm:px-3 md:px-4 rounded-md hover:opacity-90 transition-opacity font-medium text-sm sm:text-base"
                     style={{ color: '#FFFFFF', backgroundColor: '#6B7280' }}
                   >
-                    <span className="inline sm:hidden">🔐</span>
+                    <i className="pi pi-lock mr-0 sm:mr-1"></i>
                     <span className="hidden sm:inline">Iniciar Sesión</span>
                   </button>
                   <button
@@ -227,7 +258,7 @@ export function HomeView() {
                     className="px-2 py-2 sm:px-3 md:px-4 text-white rounded-md hover:opacity-90 transition-opacity text-sm sm:text-base"
                     style={{ backgroundColor: '#4CAF50' }}
                   >
-                    <span className="inline sm:hidden">📝</span>
+                    <i className="pi pi-user-plus mr-0 sm:mr-1"></i>
                     <span className="hidden sm:inline">Registrarse</span>
                   </button>
                 </>
@@ -273,37 +304,19 @@ export function HomeView() {
               />
             </div>
 
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2" style={{ color: '#000000' }}>
-                Precio mínimo
-              </label>
-              <input
-                type="number"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-                placeholder="0"
-                min="0"
-                step="0.01"
-                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-sm"
-                style={{ borderColor: '#D1D5DB', borderWidth: '1px', backgroundColor: '#FFFFFF', color: '#000000' }}
-              />
-            </div>
+            <PriceSlider 
+              label="Precio mínimo"
+              value={minPrice}
+              maxValue={maxProductPrice}
+              onChange={setMinPrice}
+            />
 
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2" style={{ color: '#000000' }}>
-                Precio máximo
-              </label>
-              <input
-                type="number"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-                placeholder="Sin límite"
-                min="0"
-                step="0.01"
-                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-sm"
-                style={{ borderColor: '#D1D5DB', borderWidth: '1px', backgroundColor: '#FFFFFF', color: '#000000' }}
-              />
-            </div>
+            <PriceSlider 
+              label="Precio máximo"
+              value={maxPrice}
+              maxValue={maxProductPrice}
+              onChange={setMaxPrice}
+            />
 
             <button
               onClick={() => setSidebarVisible(false)}
@@ -319,8 +332,22 @@ export function HomeView() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
           {filteredProducts.map(product => (
             <div key={product.id} className="rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow flex flex-col" style={{ backgroundColor: '#D1D5DB' }}>
-              <div className="w-full h-40 sm:h-48 flex items-center justify-center p-6 sm:p-8" style={{ backgroundColor: '#F3F4F6', borderBottom: '2px solid #E5E7EB' }}>
-                <span className="text-5xl sm:text-6xl md:text-7xl">🛍️</span>
+              <div className="w-full h-40 sm:h-48 flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#F3F4F6', borderBottom: '2px solid #E5E7EB' }}>
+                {product.image_url ? (
+                  <img 
+                    src={product.image_url} 
+                    alt={product.name}
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const sibling = e.currentTarget.nextElementSibling as HTMLElement;
+                      if (sibling) sibling.style.display = 'flex';
+                    }}
+                  />
+                ) : null}
+                {!product.image_url && (
+                  <i className="pi pi-shopping-bag items-center justify-center flex" style={{ fontSize: '4rem', color: '#9CA3AF' }}></i>
+                )}
               </div>
               <div className="p-4 sm:p-5 md:p-6 flex flex-col flex-grow">
                 <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2 line-clamp-2" style={{ color: '#000000' }}>
