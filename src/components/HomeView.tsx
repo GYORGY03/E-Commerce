@@ -7,6 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { Sidebar } from 'primereact/sidebar';
 import { Button } from 'primereact/button';
 import { Slider } from 'primereact/slider';
+import ProductCarousel from './Carousel';
 
 // Componente de Slider para precios
 function PriceSlider({ label, value, maxValue, onChange }: { 
@@ -269,6 +270,11 @@ export function HomeView() {
       </header>
 
       <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        {/* Carousel de productos */}
+        <div className="mb-8">
+          <ProductCarousel />
+        </div>
+
         {/* Botón para abrir filtros */}
         <div className="mb-6">
           <Button 
